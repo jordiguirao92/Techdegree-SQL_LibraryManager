@@ -36,12 +36,14 @@ app.use((req, res, next) => {
 
 //Error handling middelware
 app.use((err, req, res, next) => {
+	res.locals.error = err;
 	console.dir(err);
 	res.status(err.status);
-	if (err.status === 404)
+	if (err.status === 404) {
+		res.render('error'); //page_not_found
+	} else {
 		res.render('page_not_found');
-	else if (err.status === 500)
-		res.render('error');
+	}		
 });
 
 

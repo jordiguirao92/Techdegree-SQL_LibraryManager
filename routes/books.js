@@ -19,7 +19,7 @@ function asyncHandler(cb){
 router.get('/', asyncHandler(async (req, res, next) => {
   const books = await Book.findAll({ order: [['title']] });
   console.log(books.map(book => book.toJSON()));
-  res.render('all_books',{books: books});
+  res.render('index',{books: books});
   }));
 
 
@@ -40,7 +40,6 @@ router.post('/new', asyncHandler(async(req, res, next) => {
       book = await Book.build(req.body);
       const bookData = {book: book, errors: error.errors};
       res.render('new_book', bookData);
-      
     } else {
       throw error;
     }
@@ -53,9 +52,11 @@ router.get('/:id', asyncHandler(async(req, res, next) => {
   try {
     const book = await Book.findByPk(req.params.id);
     if(book){
-      res.render('book_detail', {book: book});
+      res.render('update-book', {book: book});
     } else {
-      res.status(404).render('page_not_found');
+      const err = new Error('Sorry, book not found');
+      err.status = 404;
+      next(err);
     }
   } catch (error) {
     res.status(404).render('page_not_found');
@@ -71,14 +72,14 @@ router.post('/:id', asyncHandler(async(req, res, next) => {
       await book.update(req.body);
       res.redirect('/books');
     } else {
-      res.status(404).render('page_not_found');
+      res.status(404).render('error');
     }
     
   } catch (error){
     if (error.name === "SequelizeValidationError") {
       book = await Book.build(req.body);
       const bookData = {book: book, errors: error.errors};
-      res.render('new_book', bookData);
+      res.render('update-book', bookData);
     } else {
       throw error;
     }
