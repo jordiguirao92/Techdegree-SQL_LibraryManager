@@ -40,9 +40,9 @@ app.use((err, req, res, next) => {
 	console.dir(err);
 	res.status(err.status);
 	if (err.status === 404) {
-		res.render('error'); //page_not_found
+		res.render('error'); 
 	} else {
-		res.render('page_not_found');
+		res.render('page-not-found');
 	}		
 });
 

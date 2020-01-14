@@ -25,7 +25,7 @@ router.get('/', asyncHandler(async (req, res, next) => {
 
 //get /books/new - Shows the create new book form.
 router.get('/new', (req, res, next) => {
-	res.render('new_book');
+	res.render('new-book');
 });
 
 //post /books/new - Posts a new book to the database. 
@@ -39,7 +39,7 @@ router.post('/new', asyncHandler(async(req, res, next) => {
     if (error.name === 'SequelizeValidationError') {
       book = await Book.build(req.body);
       const bookData = {book: book, errors: error.errors};
-      res.render('new_book', bookData);
+      res.render('new-book', bookData);
     } else {
       throw error;
     }
@@ -59,7 +59,7 @@ router.get('/:id', asyncHandler(async(req, res, next) => {
       next(err);
     }
   } catch (error) {
-    res.status(404).render('page_not_found');
+    res.status(404).render('page-not-found');
   }
 }));
 
@@ -95,10 +95,10 @@ router.post('/:id/delete', asyncHandler(async(req, res, next) => {
       await book.destroy();
       res.redirect('/books');
     } else {
-      res.status(404).render('page_not_found');
+      res.status(404).render('page-not-found');
     }
   } catch (error){
-    res.status(404).render('page_not_found');
+    res.status(404).render('page-not-found');
   }
 }));
 
